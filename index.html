@@ -145,6 +145,92 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/20/WeekReport-2022-0220-md/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Zicong Liang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="子聪的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/02/20/WeekReport-2022-0220-md/" class="post-title-link" itemprop="url">周报</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-02-20 21:16:45" itemprop="dateCreated datePublished" datetime="2022-02-20T21:16:45+08:00">2022-02-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-02-28 22:36:45" itemprop="dateModified" datetime="2022-02-28T22:36:45+08:00">2022-02-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%91%A8%E6%8A%A5/" itemprop="url" rel="index"><span itemprop="name">周报</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="本周工作"><a href="#本周工作" class="headerlink" title="本周工作"></a>本周工作</h1><h2 id="k8s自带的testbench编译尝试"><a href="#k8s自带的testbench编译尝试" class="headerlink" title="k8s自带的testbench编译尝试"></a>k8s自带的testbench编译尝试</h2><p>执行测试命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make test-integration WHAT=./test/integration/scheduler_perf KUBE_TEST_VMODULE=&quot;&#x27;&#x27;&quot; KUBE_TEST_ARGS=&quot;-run=^$$ -bench=.&quot;</span><br></pre></td></tr></table></figure>
+<p>报错 </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">+++ [0220 15:01:00] Checking etcd is on PATH</span><br><span class="line">/home/lzc2022/download/kubernetes-master/third_party/etcd/etcd</span><br><span class="line">+++ [0220 15:01:00] Starting etcd instance</span><br><span class="line"></span><br><span class="line">unable to start etcd as port 2379 is in use. please stop the process listening on this port and retry.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tcp        0      0 192.168.2.224:2379      0.0.0.0:*               LISTEN     </span><br><span class="line">tcp        0      0 127.0.0.1:2379          0.0.0.0:*               LISTEN     </span><br><span class="line"></span><br><span class="line">+++ [0220 15:01:00] Cleaning up etcd</span><br><span class="line">+++ [0220 15:01:00] Integration test cleanup complete</span><br><span class="line">make: *** [Makefile:203: test-integration] Error 1</span><br></pre></td></tr></table></figure>
+<p>问学长之后得知要修改etcd端口，先不管这个问题了。</p>
+<h2 id="解决-kube-scheduler-simulator-安装问题"><a href="#解决-kube-scheduler-simulator-安装问题" class="headerlink" title="解决  kube-scheduler-simulator 安装问题"></a>解决  kube-scheduler-simulator 安装问题</h2><p>更改Dockerfile<br>添加<br>ENV GOPROXY&#x3D;<a target="_blank" rel="noopener" href="https://goproxy.cn/">https://goproxy.cn</a><br>编译成功<br>想要先试着用用simulator<br>把远程端口映射到本地 方便在本地网页上使用simulator</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh lzc2022@42.192.39.6 -L 127.0.0.1:8888:127.0.0.1:3000</span><br></pre></td></tr></table></figure>
+<p>但是通过这种方式发现网页不能完全显示，无法运行yaml文件</p>
+<p>咨询学长之后发现可以用之前玩过的nodeport发布服务的方式，将服务发布到某个端口上进行访问。</p>
+<h2 id="DashBoard-获取token"><a href="#DashBoard-获取token" class="headerlink" title="DashBoard 获取token"></a>DashBoard 获取token</h2><p>获取token</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl describe secrets -n kube-system $(kubectl -n kube-system get secret | awk &#x27;/dashboard-admin/&#123;print $1&#125;&#x27;)</span><br></pre></td></tr></table></figure>
+<p>发现DashBoard无法正常工作，显示已有的pod<br>查看服务器 发现无法连接到6443和8080的问题 Node 也是 NOT Ready 状态<br>折腾了很多方法 都没有找到解决方案，很是有点挫败感，去做文献翻译了。</p>
+<h2 id="文献翻译"><a href="#文献翻译" class="headerlink" title="文献翻译"></a>文献翻译</h2><h2 id="总结与反思"><a href="#总结与反思" class="headerlink" title="总结与反思"></a>总结与反思</h2><p>本周感觉做了很多事情，但是感觉都没有做到点子上。就是遇到问题的时候，总是很难去找到问题的原因究竟是出在哪里；在网上看了一大堆解决方案，<br>都是各说各的，没有那种清晰明了的感觉，试了很多种方案，就很容易有挫败感，可能还是相关经验太少了，打算下周去实验室工作，方便当面请教，也好好<br>学习一下张龙学长解决问题的方法。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/20/c-kfjs%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -170,7 +256,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-02-20 19:43:58 / 修改时间：19:44:55" itemprop="dateCreated datePublished" datetime="2022-02-20T19:43:58+08:00">2022-02-20</time>
+              <time title="创建时间：2022-02-20 19:43:58 / 修改时间：21:22:09" itemprop="dateCreated datePublished" datetime="2022-02-20T19:43:58+08:00">2022-02-20</time>
             </span>
 
           
@@ -184,7 +270,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <h1 id="第三章-多线程编程"><a href="#第三章-多线程编程" class="headerlink" title="第三章 多线程编程"></a>第三章 多线程编程</h1><h2 id="利用pstack排查某个进程CPU使用率过高"><a href="#利用pstack排查某个进程CPU使用率过高" class="headerlink" title="利用pstack排查某个进程CPU使用率过高"></a>利用pstack排查某个进程CPU使用率过高</h2>
       
     </div>
 
@@ -335,9 +421,13 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
         <span class="site-state-item-count">1</span>
